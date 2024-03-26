@@ -1,44 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
-const buttons = [
-  "Q",
-  "W",
-  "E",
-  "R",
-  "T",
-  "Y",
-  "U",
-  "I",
-  "O",
-  "P",
-  "A",
-  "S",
-  "D",
-  "F",
-  "G",
-  "H",
-  "J",
-  "K",
-  "L",
-  "Ñ",
-  "Enviar",
-  "Z",
-  "X",
-  "C",
-  "V",
-  "B",
-  "N",
-  "M",
-  "Borrar",
-];
 ---
 
 <Layout title="Averigua la palabra">
   <main class="min-h-svh grid place-items-center">
     <div class="grid grid-cols-1 gap-1" id="words-grid"></div>
-    <div class="flex flex-wrap w-full p-2 justify-center max-w-lg gap-1">
-      {
+    <div
+      class="flex flex-wrap w-full p-2 justify-center max-w-lg gap-1"
+      id="btns-container"
+    >
+      <!-- {
         buttons.map((el, index) => (
           <button
             class={`max-w-[9%] rounded-md keyboard-btn  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`}
@@ -47,7 +18,7 @@ const buttons = [
             {el}
           </button>
         ))
-      }
+      } -->
     </div>
   </main>
 </Layout>
@@ -61,28 +32,66 @@ const buttons = [
     ["0", "0", "0", "0", "0"],
     ["0", "0", "0", "0", "0"],
   ];
+
   let activeArray = 0;
-  const buttons = document.querySelectorAll(".keyboard-btn");
 
-  buttons.forEach((el) => {
-    if (el.id === "Borrar") {
-			el.addEventListener("click", () => {
-				removeLetter();
-			});
-			return;
-    }
-    if (el.id === "Enviar") {
-			el.addEventListener("click", () => {
-				send();
-			});
-			return;
-    }
-    el.addEventListener("click", () => {
-      addLetter(el.textContent!);
-    });
-  });
-
+  const buttons = [
+    "Q",
+    "W",
+    "E",
+    "R",
+    "T",
+    "Y",
+    "U",
+    "I",
+    "O",
+    "P",
+    "A",
+    "S",
+    "D",
+    "F",
+    "G",
+    "H",
+    "J",
+    "K",
+    "L",
+    "Ñ",
+    "Enviar",
+    "Z",
+    "X",
+    "C",
+    "V",
+    "B",
+    "N",
+    "M",
+    "Borrar",
+  ];
+  const word = "UPITE";
+  const btnsContainer = document.querySelector("#btns-container");
   const grid = document.querySelector("#words-grid");
+
+  buttons.forEach((el, index) => {
+    const btn = document.createElement("button");
+    btn.className = `max-w-[9%] rounded-md keyboard-btn  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
+    btn.textContent = el;
+    if (el !== "Enviar" && el !== "Borrar") {
+      btn.addEventListener("click", () => {
+        addLetter(el);
+      });
+    }
+    if (el === "Borrar") {
+      btn.addEventListener("click", () => {
+        removeLetter();
+      });
+    }
+    if (el === "Enviar") {
+      btn.addEventListener("click", () => {
+        send();
+      });
+    }
+    //TODO: Enter
+    btnsContainer?.appendChild(btn);
+  });
 
   function renderGrid() {
     matriz.forEach((array, i) => {
@@ -99,7 +108,6 @@ const buttons = [
     });
   }
 
-  renderGrid();
   function addLetter(value: string) {
     const index = matriz[activeArray].indexOf("0");
     if (index !== -1) {
@@ -110,18 +118,44 @@ const buttons = [
   }
 
   function removeLetter() {
-		console.log("Borrar")
-    const index = matriz[activeArray].indexOf("0")
-		if (index !== -1) {
-			matriz[activeArray][index-1] = "0";
-			document.querySelector(`#cell-${activeArray}-${index-1}`)!.textContent =
+    const index = matriz[activeArray].indexOf("0");
+
+    if (index !== -1 && index !== 0) {
+      document.querySelector(`#cell-${activeArray}-${index - 1}`)!.textContent =
         " ";
-		}
-    console.log(index);
+      matriz[activeArray][index - 1] = "0";
+    } else {
+      matriz[activeArray][4] = "0";
+      document.querySelector(`#cell-${activeArray}-${4}`)!.textContent = " ";
+    }
   }
   function send() {
-		console.log("Enviar")
-    /* const index = matriz[activeArray].findIndex((el) => el !== " ");
-    console.log(index); */
+    console.log("Enviar");
+    if (matriz[activeArray].includes("0")) {
+      console.log("no completado");
+    }else{
+			console.log(matriz[activeArray].join(''))
+			if (word === matriz[activeArray].join('')) {
+				console.log('es igual')
+			}else{
+				console.log('no es igual')
+			}
+		}
   }
+
+  document.addEventListener("keydown", (evt) => {
+    const letter = evt.key.toUpperCase();
+
+    if (buttons.includes(letter)) {
+      addLetter(letter);
+    }
+    if (letter === "BACKSPACE") {
+      removeLetter();
+    }
+    if (letter === "ENTER") {
+      send();
+    }
+  });
+
+  renderGrid();
 </script>
