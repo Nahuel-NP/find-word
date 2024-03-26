@@ -13,7 +13,7 @@ const buttons = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H'
         Array(30)
           .fill("")
           .map((el, index) => (
-            <span class="bg-white rounded-sm border-gray-400 border w-16 flex text-5xl justify-center items-center h-20">
+            <span class="bg-white rounded-md border-gray-400 border w-16 flex text-5xl justify-center items-center h-20">
               A
             </span>
           ))
@@ -22,7 +22,7 @@ const buttons = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H'
 		<div class="flex flex-wrap w-full p-2 justify-center max-w-lg gap-1">
 			{
 				buttons.map((el,index)=>
-					<button class={`max-w-[9%]  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? 'max-w-[14%]' : 'max-w-[9%]'}`}>{el}</button>
+					<button class={`max-w-[9%] rounded-md  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? 'max-w-[14%]' : 'max-w-[9%]'}`}>{el}</button>
 				)
 			}
 		</div>
