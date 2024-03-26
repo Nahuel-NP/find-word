@@ -1,15 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const matriz = [
-  [" "," "," "," "," "],
-  [" "," "," "," "," "],
-  [" "," "," "," "," "],
-  [" "," "," "," "," "],
-  [" "," "," "," "," "],
-  [" "," "," "," "," "],
-
-];
 const buttons = [
   "Q",
   "W",
@@ -45,22 +36,13 @@ const buttons = [
 
 <Layout title="Averigua la palabra">
   <main class="min-h-svh grid place-items-center">
-    <div class="grid grid-cols-5 gap-1">
-      {
-        matriz.map((array, index) =>
-          array.map((el,i) => (
-            <span class="bg-white rounded-md border-gray-400 border w-16 flex text-5xl justify-center items-center h-20">
-              
-            </span>
-          ))
-        )
-      }
-    </div>
+    <div class="grid grid-cols-1 gap-1" id="words-grid"></div>
     <div class="flex flex-wrap w-full p-2 justify-center max-w-lg gap-1">
       {
         buttons.map((el, index) => (
           <button
             class={`max-w-[9%] rounded-md keyboard-btn  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`}
+            id={el}
           >
             {el}
           </button>
@@ -71,10 +53,75 @@ const buttons = [
 </Layout>
 
 <script>
+  const matriz = [
+    ["0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
+  ];
+  let activeArray = 0;
   const buttons = document.querySelectorAll(".keyboard-btn");
-  buttons.forEach((el) =>
+
+  buttons.forEach((el) => {
+    if (el.id === "Borrar") {
+			el.addEventListener("click", () => {
+				removeLetter();
+			});
+			return;
+    }
+    if (el.id === "Enviar") {
+			el.addEventListener("click", () => {
+				send();
+			});
+			return;
+    }
     el.addEventListener("click", () => {
-      console.log(el.textContent);
-    })
-  );
+      addLetter(el.textContent!);
+    });
+  });
+
+  const grid = document.querySelector("#words-grid");
+
+  function renderGrid() {
+    matriz.forEach((array, i) => {
+      const row = document.createElement("div");
+      row.className = "grid grid-cols-5 gap-1";
+      array.forEach((el, j) => {
+        const element = document.createElement("span");
+        element.id = `cell-${i}-${j}`;
+        element.className =
+          "bg-white rounded-md border-gray-400 border w-16 flex text-5xl justify-center items-center h-20";
+        row?.appendChild(element);
+      });
+      grid?.appendChild(row);
+    });
+  }
+
+  renderGrid();
+  function addLetter(value: string) {
+    const index = matriz[activeArray].indexOf("0");
+    if (index !== -1) {
+      matriz[activeArray][index] = value;
+      document.querySelector(`#cell-${activeArray}-${index}`)!.textContent =
+        value;
+    }
+  }
+
+  function removeLetter() {
+		console.log("Borrar")
+    const index = matriz[activeArray].indexOf("0")
+		if (index !== -1) {
+			matriz[activeArray][index-1] = "0";
+			document.querySelector(`#cell-${activeArray}-${index-1}`)!.textContent =
+        " ";
+		}
+    console.log(index);
+  }
+  function send() {
+		console.log("Enviar")
+    /* const index = matriz[activeArray].findIndex((el) => el !== " ");
+    console.log(index); */
+  }
 </script>
