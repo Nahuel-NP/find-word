@@ -160,6 +160,7 @@ import Layout from "../layouts/Layout.astro";
 
     // verifica letras en posicion correcta
     let trueCounter = 0;
+
     for (let i = 0; i < word.length; i++) {
       if (writedWord[i] === word[i]) {
         color = "bg-green-400";
@@ -171,10 +172,14 @@ import Layout from "../layouts/Layout.astro";
 
     //verifica letras en posicion incorrecta
     for (let i = 0; i < writedWord.length; i++) {
+      console.log('writed char', writedWord[i])
+      console.log('current char ', word[i])
       if (writedWord[i] !== word[i] && restLetters.includes(writedWord[i])) {
+        console.log('hay cohincidencia')
         color = "bg-yellow-400";
         changeElementColor(writedWord[i], color, i);
-        restLetters[i] = "";
+        restLetters[restLetters.indexOf(writedWord[i])] = "";
+        console.log('rest letters ',restLetters)
       }
     }
 
