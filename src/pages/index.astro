@@ -43,6 +43,7 @@ import Layout from "../layouts/Layout.astro";
   let activeArray = 0;
 
   const word = getRandomWord(words).toUpperCase();
+
   const btnsContainer = document.querySelector("#btns-container");
   const grid = document.querySelector("#words-grid");
 
@@ -119,16 +120,19 @@ import Layout from "../layouts/Layout.astro";
 
   document.addEventListener("keydown", (evt) => {
     const letter = evt.key.toUpperCase();
-
-    if (buttons.includes(letter)) {
-      addLetter(letter);
-    }
+    if (activeArray!== 10) {
+      
+      
+      if (buttons.includes(letter)) {
+        addLetter(letter);
+      }
     if (letter === "BACKSPACE") {
       removeLetter();
     }
     if (letter === "ENTER") {
       send();
     }
+  }
   });
 
   renderGrid();
@@ -167,14 +171,15 @@ import Layout from "../layouts/Layout.astro";
 
     if (trueCounter === 5) {
       setTimeout(() => {
-        window.alert("Ganaste zopenco!!");
+        window.alert("Bien hechoo!!");
       }, 1000);
+      activeArray = 10;
     } else {
       activeArray++;
     }
 
     if (activeArray === 6) {
-      window.alert(`Perdiste zopenco!! la palabra era ${word}`);
+      window.alert(`Perdiste!! la palabra era ${word}`);
     }
   }
 
