@@ -172,14 +172,14 @@ import Layout from "../layouts/Layout.astro";
 
     //verifica letras en posicion incorrecta
     for (let i = 0; i < writedWord.length; i++) {
-      console.log('writed char', writedWord[i])
-      console.log('current char ', word[i])
+      console.log("writed char", writedWord[i]);
+      console.log("current char ", word[i]);
       if (writedWord[i] !== word[i] && restLetters.includes(writedWord[i])) {
-        console.log('hay cohincidencia')
+        console.log("hay cohincidencia");
         color = "bg-yellow-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[restLetters.indexOf(writedWord[i])] = "";
-        console.log('rest letters ',restLetters)
+        console.log("rest letters ", restLetters);
       }
     }
 
@@ -190,26 +190,29 @@ import Layout from "../layouts/Layout.astro";
     }
 
     if (trueCounter === 5) {
-      window.alert('Ganaste zopenco!!')
+      setTimeout(() => {
+        window.alert("Ganaste zopenco!!");
+      }, 1000);
     } else {
       activeArray++;
     }
-    
+
     if (activeArray === 6) {
-      window.alert(`Perdiste zopenco!! la palabra era ${word}`)
+      window.alert(`Perdiste zopenco!! la palabra era ${word}`);
     }
   }
 
   function changeElementColor(char: string, color: string, index: number) {
     const button = document.querySelector(`#Letter-${char.toUpperCase()}`);
 
-
     if (!button?.classList.contains("bg-green-400")) {
-      if (button?.classList.contains('bg-yellow-400') && color ==='bg-green-400' ) {
+      if (
+        button?.classList.contains("bg-yellow-400") &&
+        color === "bg-green-400"
+      ) {
         button?.classList.remove("bg-white", "bg-yellow-400");
         button?.classList.add(color);
-      }else{
-
+      } else {
         button?.classList.remove("bg-white");
         button?.classList.add(color);
       }
