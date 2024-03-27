@@ -4,6 +4,12 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="Averigua la palabra">
   <main class="min-h-svh grid place-items-center">
+    <div class="fixed -z-10 h-full w-full bg-slate-950">
+      <div
+        class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]"
+      >
+      </div>
+    </div>
     <div class="grid grid-cols-1 gap-1" id="words-grid"></div>
     <div
       class="flex flex-wrap w-full p-2 justify-center max-w-lg gap-1"
@@ -62,9 +68,9 @@ import Layout from "../layouts/Layout.astro";
 
   buttons.forEach((el, index) => {
     const btn = document.createElement("button");
-    btn.className = ` rounded-md keyboard-btn  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
+    btn.className = ` rounded-md keyboard-btn transition-colors  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
     btn.textContent = el;
-    btn.id = el + index;
+    btn.id = "Letter-" + el;
     if (el !== "Enviar" && el !== "Borrar") {
       btn.addEventListener("click", () => {
         addLetter(el);
@@ -92,7 +98,7 @@ import Layout from "../layouts/Layout.astro";
         const element = document.createElement("span");
         element.id = `row-${i}-cell-${j}`;
         element.className =
-          "bg-white rounded-md transition-colors border-gray-400 border w-16 flex text-5xl justify-center items-center h-20";
+          "bg-white rounded-md transition-colors border-gray-400 border size-16 flex text-5xl justify-center items-center ";
         row?.appendChild(element);
       });
       grid?.appendChild(row);
@@ -149,6 +155,8 @@ import Layout from "../layouts/Layout.astro";
 
   function verifyWord(writedWord: string) {
     if (word === writedWord) {
+      // mensaje de ganador
+
       document
         .querySelector(`#row-${activeArray}`)
         ?.classList.add("[&>span]:bg-green-400");
@@ -158,28 +166,54 @@ import Layout from "../layouts/Layout.astro";
       const writedArray = writedWord.split("");
       writedArray.forEach((char, index) => {
         let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
-        // incluye?
 
+        // incluye y en la misma posicion
         if (word.at(index) === char) {
           color = "bg-green-400";
         } else if (word.includes(char)) {
+          // incluye pero no en la misma posicion
+
+          // contador de letras repetidas en palabra original
+          let letterCountOriginalWord = 0;
+
+          word.split("").forEach((el) => {
+            if (el === char) letterCountOriginalWord++;
+          });
+
+          let letterCountWritedWord = 0;
+
+          writedArray.forEach((el) => {
+            if (el === char) letterCountWritedWord++;
+          });
+
+          console.log(
+            `la letra ${char} aparece ${letterCountWritedWord} veces en escrita y ${letterCountOriginalWord} veces en original`
+          );
+
+          // const indexs = writedArray.
+          // comprobar si
+
           color = "bg-yellow-400";
         } else {
-					color = "bg-gray-400";
-					console.log('ingresa?')
-					console.log(color)
+          //no incluye
+          color = "bg-gray-400";
+        }
+
+        const button = document.querySelector(`#Letter-${char.toUpperCase()}`);
+        if (!button?.classList.contains("bg-green-400")) {
+          button?.classList.remove("bg-white", "bg-yellow-400");
+          button?.classList.add(color);
+        } else {
         }
 
         const cell = document.querySelector(
           `#row-${activeArray}-cell-${index}`
         );
 
-				cell?.classList.remove('bg-white');
-				cell?.classList.add(color);
-        // esta en la misma posicion?
-        // cuantas incluye?
+        cell?.classList.remove("bg-white");
+        cell?.classList.add(color);
       });
-			activeArray+=1;
+      activeArray += 1;
     }
   }
 </script>
