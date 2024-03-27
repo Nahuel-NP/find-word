@@ -20,6 +20,11 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
+
+  import { buttons } from "../data/buttons";
+  import { words } from "../data/words";
+
+
   const matriz = [
     ["0", "0", "0", "0", "0"],
     ["0", "0", "0", "0", "0"],
@@ -29,40 +34,15 @@ import Layout from "../layouts/Layout.astro";
     ["0", "0", "0", "0", "0"],
   ];
 
+  function getRandomWord(lista: Array<string>) {
+    let rnd = Math.random();
+    let item = Math.floor(rnd * lista.length);
+    return lista[item];
+  }
+
   let activeArray = 0;
 
-  const buttons = [
-    "Q",
-    "W",
-    "E",
-    "R",
-    "T",
-    "Y",
-    "U",
-    "I",
-    "O",
-    "P",
-    "A",
-    "S",
-    "D",
-    "F",
-    "G",
-    "H",
-    "J",
-    "K",
-    "L",
-    "Ñ",
-    "Enviar",
-    "Z",
-    "X",
-    "C",
-    "V",
-    "B",
-    "N",
-    "M",
-    "Borrar",
-  ];
-  const word = "ROHEE";
+  const word = getRandomWord(words).toUpperCase();
   const btnsContainer = document.querySelector("#btns-container");
   const grid = document.querySelector("#words-grid");
 
@@ -131,7 +111,7 @@ import Layout from "../layouts/Layout.astro";
 
   function send() {
     if (matriz[activeArray].includes("0")) {
-      console.log("No completado");
+      window.alert('Completa la palabra')
     } else {
       verifyWord(matriz[activeArray].join(""));
     }
@@ -155,7 +135,6 @@ import Layout from "../layouts/Layout.astro";
 
   function verifyWord(writedWord: string) {
     let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
-
     let restLetters = word.split("");
 
     // verifica letras en posicion correcta
@@ -172,14 +151,11 @@ import Layout from "../layouts/Layout.astro";
 
     //verifica letras en posicion incorrecta
     for (let i = 0; i < writedWord.length; i++) {
-      console.log("writed char", writedWord[i]);
-      console.log("current char ", word[i]);
+
       if (writedWord[i] !== word[i] && restLetters.includes(writedWord[i])) {
-        console.log("hay cohincidencia");
         color = "bg-yellow-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[restLetters.indexOf(writedWord[i])] = "";
-        console.log("rest letters ", restLetters);
       }
     }
 
