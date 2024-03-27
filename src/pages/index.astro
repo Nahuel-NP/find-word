@@ -62,7 +62,7 @@ import Layout from "../layouts/Layout.astro";
     "M",
     "Borrar",
   ];
-  const word = "BOLSA";
+  const word = "CHAJA";
   const btnsContainer = document.querySelector("#btns-container");
   const grid = document.querySelector("#words-grid");
 
@@ -159,11 +159,13 @@ import Layout from "../layouts/Layout.astro";
     let restLetters = word.split("");
 
     // verifica letras en posicion correcta
+    let trueCounter = 0;
     for (let i = 0; i < word.length; i++) {
       if (writedWord[i] === word[i]) {
         color = "bg-green-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[i] = "";
+        trueCounter++;
       }
     }
 
@@ -182,7 +184,15 @@ import Layout from "../layouts/Layout.astro";
       changeElementColor(writedWord[i], color, i);
     }
 
-    activeArray++;
+    if (trueCounter === 5) {
+      window.alert('Ganaste zopenco!!')
+    } else {
+      activeArray++;
+    }
+    
+    if (activeArray === 6) {
+      window.alert(`Perdiste zopenco!! la palabra era ${word}`)
+    }
   }
 
   function changeElementColor(char: string, color: string, index: number) {
