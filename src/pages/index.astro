@@ -154,66 +154,47 @@ import Layout from "../layouts/Layout.astro";
   renderGrid();
 
   function verifyWord(writedWord: string) {
-    if (word === writedWord) {
-      // mensaje de ganador
+    let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
 
-      document
-        .querySelector(`#row-${activeArray}`)
-        ?.classList.add("[&>span]:bg-green-400");
-    } else {
-      // TODO verificar que la palabra exista;
+    let restLetters = word.split("");
 
-      const writedArray = writedWord.split("");
-      writedArray.forEach((char, index) => {
-        let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
-
-        // incluye y en la misma posicion
-        if (word.at(index) === char) {
-          color = "bg-green-400";
-        } else if (word.includes(char)) {
-          // incluye pero no en la misma posicion
-
-          // contador de letras repetidas en palabra original
-          let letterCountOriginalWord = 0;
-
-          word.split("").forEach((el) => {
-            if (el === char) letterCountOriginalWord++;
-          });
-
-          let letterCountWritedWord = 0;
-
-          writedArray.forEach((el) => {
-            if (el === char) letterCountWritedWord++;
-          });
-
-          console.log(
-            `la letra ${char} aparece ${letterCountWritedWord} veces en escrita y ${letterCountOriginalWord} veces en original`
-          );
-
-          // const indexs = writedArray.
-          // comprobar si
-
-          color = "bg-yellow-400";
-        } else {
-          //no incluye
-          color = "bg-gray-400";
-        }
-
-        const button = document.querySelector(`#Letter-${char.toUpperCase()}`);
-        if (!button?.classList.contains("bg-green-400")) {
-          button?.classList.remove("bg-white", "bg-yellow-400");
-          button?.classList.add(color);
-        } else {
-        }
-
-        const cell = document.querySelector(
-          `#row-${activeArray}-cell-${index}`
-        );
-
-        cell?.classList.remove("bg-white");
-        cell?.classList.add(color);
-      });
-      activeArray += 1;
+    // verifica letras en posicion correcta
+    for (let i = 0; i < word.length; i++) {
+      if (writedWord[i] === word[i]) {
+        color = "bg-green-400";
+        changeElementColor(writedWord[i], color, i);
+        restLetters[i] = "";
+      }
     }
+
+    //verifica letras en posicion incorrecta
+    for (let i = 0; i < writedWord.length; i++) {
+      if (writedWord[i] !== word[i] && restLetters.includes(writedWord[i])) {
+        color = "bg-yellow-400";
+        changeElementColor(writedWord[i], color, i);
+        restLetters[i] = "";
+      }
+    }
+
+    // letras no validas
+    for (let i = 0; i < writedWord.length; i++) {
+      color = "bg-gray-400";
+      changeElementColor(writedWord[i], color, i);
+    }
+
+    activeArray++;
+  }
+
+  function changeElementColor(char: string, color: string, index: number) {
+    const button = document.querySelector(`#Letter-${char.toUpperCase()}`);
+    if (!button?.classList.contains("bg-green-400")) {
+      button?.classList.remove("bg-white", "bg-yellow-400");
+      button?.classList.add(color);
+    }
+
+    const cell = document.querySelector(`#row-${activeArray}-cell-${index}`);
+
+    cell?.classList.remove("bg-white");
+    cell?.classList.add(color);
   }
 </script>
