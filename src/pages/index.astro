@@ -202,9 +202,17 @@ import Layout from "../layouts/Layout.astro";
 
   function changeElementColor(char: string, color: string, index: number) {
     const button = document.querySelector(`#Letter-${char.toUpperCase()}`);
+
+
     if (!button?.classList.contains("bg-green-400")) {
-      button?.classList.remove("bg-white", "bg-yellow-400");
-      button?.classList.add(color);
+      if (button?.classList.contains('bg-yellow-400') && color ==='bg-green-400' ) {
+        button?.classList.remove("bg-white", "bg-yellow-400");
+        button?.classList.add(color);
+      }else{
+
+        button?.classList.remove("bg-white");
+        button?.classList.add(color);
+      }
     }
 
     const cell = document.querySelector(`#row-${activeArray}-cell-${index}`);
