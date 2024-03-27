@@ -48,7 +48,7 @@ import Layout from "../layouts/Layout.astro";
 
   buttons.forEach((el, index) => {
     const btn = document.createElement("button");
-    btn.className = ` rounded-md keyboard-btn transition-colors  w-full text-sm h-16 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
+    btn.className = ` rounded-md keyboard-btn transition-colors  w-full text-sm h-14 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
     btn.textContent = el;
     btn.id = "Letter-" + el;
     if (el !== "Enviar" && el !== "Borrar") {
