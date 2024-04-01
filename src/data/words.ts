@@ -75,4 +75,15 @@ export const words = [
   "campo",
   "ficha",
   "facha",
+  "fuera",
+  "fiera",
+  "banco",
+  "manco",
+  "stich",
+  "sofia",
+  "elias",
+  "barco",
+  "largo",
+  "peque",
+  
 ]
