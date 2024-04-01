@@ -23,8 +23,9 @@ import Layout from "../layouts/Layout.astro";
 
 <script>
   import { buttons } from "../data/buttons";
-  import { matriz,game } from "../utils/game";
-  
+  import { words } from "../data/words";
+  import { matriz, game } from "../utils/game";
+
   function showModal() {
     const modal = document.querySelector("#default-modal");
     modal?.classList.remove("hidden");
@@ -80,8 +81,9 @@ import Layout from "../layouts/Layout.astro";
     const index = matriz[game.activeArray].indexOf("0");
     if (index !== -1) {
       matriz[game.activeArray][index] = value;
-      document.querySelector(`#row-${game.activeArray}-cell-${index}`)!.textContent =
-        value;
+      document.querySelector(
+        `#row-${game.activeArray}-cell-${index}`
+      )!.textContent = value;
     }
   }
 
@@ -95,17 +97,24 @@ import Layout from "../layouts/Layout.astro";
       matriz[game.activeArray][index - 1] = "0";
     } else {
       matriz[game.activeArray][4] = "0";
-      document.querySelector(`#row-${game.activeArray}-cell-${4}`)!.textContent =
-        " ";
+      document.querySelector(
+        `#row-${game.activeArray}-cell-${4}`
+      )!.textContent = " ";
     }
   }
 
   function send() {
+    const myWord = matriz[game.activeArray].join("");
     if (matriz[game.activeArray].includes("0")) {
-
-      window.alert("Completa la palabra");
+      window.alert("Palabra incompleta");
     } else {
-      verifyWord(matriz[game.activeArray].join(""));
+      if (words.includes(myWord.toLowerCase())) {
+        verifyWord(myWord);
+      } else {
+        window.alert(
+          "Esa palabra no existe en nuestra base de datos, puede que se agregue pronto"
+        );
+      }
     }
   }
 
@@ -123,8 +132,6 @@ import Layout from "../layouts/Layout.astro";
       }
     }
   });
-
-  ;
 
   function verifyWord(writedWord: string) {
     let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
@@ -144,7 +151,10 @@ import Layout from "../layouts/Layout.astro";
 
     //verifica letras en posicion incorrecta
     for (let i = 0; i < writedWord.length; i++) {
-      if (writedWord[i] !== game.word[i] && restLetters.includes(writedWord[i])) {
+      if (
+        writedWord[i] !== game.word[i] &&
+        restLetters.includes(writedWord[i])
+      ) {
         color = "bg-yellow-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[restLetters.indexOf(writedWord[i])] = "";
@@ -187,7 +197,9 @@ import Layout from "../layouts/Layout.astro";
       }
     }
 
-    const cell = document.querySelector(`#row-${game.activeArray}-cell-${index}`);
+    const cell = document.querySelector(
+      `#row-${game.activeArray}-cell-${index}`
+    );
 
     cell?.classList.remove("bg-white");
     cell?.classList.add(color);
