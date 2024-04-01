@@ -3,7 +3,7 @@ interface Props {
   title: string;
   description: string;
 }
-const { title, description} = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <div
@@ -15,7 +15,10 @@ const { title, description} = Astro.props;
   <div class="relative p-4 w-full max-w-xl max-h-full">
     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
       <div class="flex items-center justify-between p-4 md:p-5">
-        <h3 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white">
+        <h3
+          id="modal-title"
+          class="text-xl font-semibold text-gray-900 dark:text-white"
+        >
           {title}
         </h3>
         <button
@@ -59,15 +62,20 @@ const { title, description} = Astro.props;
   </div>
 </div>
 
-<script>
+<script >
+import { restartGame } from "../utils/game";
+
   const modal = document.querySelector("#default-modal");
-  const button = document.querySelector("#default-modal");
+  const button = document.querySelector("#modal-btn");
   const closeIcon = document.querySelector("#close-icon");
 
   function hideModal() {
     modal?.classList.remove("flex");
     modal?.classList.add("hidden");
   }
-  button?.addEventListener("click", hideModal);
+  button?.addEventListener("click", () => {
+    hideModal();
+    restartGame();
+  });
   closeIcon?.addEventListener("click", hideModal);
 </script>
