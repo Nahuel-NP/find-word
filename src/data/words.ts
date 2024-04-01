@@ -63,6 +63,8 @@ export const words = [
   "zurdo",
   "menta",
   "rango",
+  "carla",
+  "rohee",
   "casco",
   "manta",
   "silla",
