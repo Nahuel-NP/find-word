@@ -3,7 +3,7 @@ import Modal from "../components/Modal.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Acierta la palabra" >
+<Layout title="Acierta la palabra">
   <main class="min-h-svh grid place-items-center relative">
     <div class="fixed -z-10 h-full w-full bg-slate-950">
       <div
@@ -17,44 +17,29 @@ import Layout from "../layouts/Layout.astro";
       id="btns-container"
     >
     </div>
-    <Modal title="Ganaste" description="Lo hiciste excelente!"/>
+    <Modal title="Ganaste" description="Lo hiciste excelente!" />
   </main>
 </Layout>
 
 <script>
-
   import { buttons } from "../data/buttons";
-  import { words } from "../data/words";
-
-
-  const matriz = [
-    ["0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0"],
-  ];
-
-  function getRandomWord(lista: Array<string>) {
-    let rnd = Math.random();
-    let item = Math.floor(rnd * lista.length);
-    return lista[item];
-  }
+  import { matriz,game } from "../utils/game";
   
-
-  let activeArray = 0;
-
-  const word = getRandomWord(words).toUpperCase();
+  function showModal() {
+    const modal = document.querySelector("#default-modal");
+    modal?.classList.remove("hidden");
+    modal?.classList.add("flex");
+  }
 
   const btnsContainer = document.querySelector("#btns-container");
   const grid = document.querySelector("#words-grid");
 
   buttons.forEach((el, index) => {
     const btn = document.createElement("button");
-    btn.className = ` rounded-md keyboard-btn transition-colors  w-full text-sm h-14 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
+    btn.className = ` rounded-md keyboard-btn qwerty transition-colors  w-full text-sm h-14 bg-white border text-center border-gray-400 ${index === 20 || index === 28 ? "max-w-[14%]" : "max-w-[9%]"}`;
     btn.textContent = el;
     btn.id = "Letter-" + el;
+
     if (el !== "Enviar" && el !== "Borrar") {
       btn.addEventListener("click", () => {
         addLetter(el);
@@ -78,77 +63,78 @@ import Layout from "../layouts/Layout.astro";
       const row = document.createElement("div");
       row.className = "grid grid-cols-5 gap-1";
       row.id = "row-" + i;
+
       array.forEach((el, j) => {
         const element = document.createElement("span");
         element.id = `row-${i}-cell-${j}`;
         element.className =
-          "bg-white rounded-md font-semibold transition-colors border-gray-400 border size-16 flex text-5xl justify-center items-center ";
+          "bg-white rounded-md cell font-semibold transition-colors border-gray-400 border size-16 flex text-5xl justify-center items-center ";
         row?.appendChild(element);
       });
+
       grid?.appendChild(row);
     });
   }
 
   function addLetter(value: string) {
-    const index = matriz[activeArray].indexOf("0");
+    const index = matriz[game.activeArray].indexOf("0");
     if (index !== -1) {
-      matriz[activeArray][index] = value;
-      document.querySelector(`#row-${activeArray}-cell-${index}`)!.textContent =
+      matriz[game.activeArray][index] = value;
+      document.querySelector(`#row-${game.activeArray}-cell-${index}`)!.textContent =
         value;
     }
   }
 
   function removeLetter() {
-    const index = matriz[activeArray].indexOf("0");
+    const index = matriz[game.activeArray].indexOf("0");
 
     if (index !== -1 && index !== 0) {
       document.querySelector(
-        `#row-${activeArray}-cell-${index - 1}`
+        `#row-${game.activeArray}-cell-${index - 1}`
       )!.textContent = " ";
-      matriz[activeArray][index - 1] = "0";
+      matriz[game.activeArray][index - 1] = "0";
     } else {
-      matriz[activeArray][4] = "0";
-      document.querySelector(`#row-${activeArray}-cell-${4}`)!.textContent =
+      matriz[game.activeArray][4] = "0";
+      document.querySelector(`#row-${game.activeArray}-cell-${4}`)!.textContent =
         " ";
     }
   }
 
   function send() {
-    if (matriz[activeArray].includes("0")) {
-      window.alert('Completa la palabra')
+    if (matriz[game.activeArray].includes("0")) {
+
+      window.alert("Completa la palabra");
     } else {
-      verifyWord(matriz[activeArray].join(""));
+      verifyWord(matriz[game.activeArray].join(""));
     }
   }
 
   document.addEventListener("keydown", (evt) => {
     const letter = evt.key.toUpperCase();
-    if (activeArray!== 10) {
-      
-      
+    if (game.activeArray !== 10) {
       if (buttons.includes(letter)) {
         addLetter(letter);
       }
-    if (letter === "BACKSPACE") {
-      removeLetter();
+      if (letter === "BACKSPACE") {
+        removeLetter();
+      }
+      if (letter === "ENTER") {
+        send();
+      }
     }
-    if (letter === "ENTER") {
-      send();
-    }
-  }
   });
 
-  renderGrid();
+  ;
 
   function verifyWord(writedWord: string) {
     let color: "bg-green-400" | "bg-gray-400" | "bg-yellow-400";
-    let restLetters = word.split("");
+    let restLetters = game.word.split("");
 
     // verifica letras en posicion correcta
     let trueCounter = 0;
 
-    for (let i = 0; i < word.length; i++) {
-      if (writedWord[i] === word[i]) {
+    for (let i = 0; i < game.word.length; i++) {
+      if (writedWord[i] === game.word[i]) {
         color = "bg-green-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[i] = "";
@@ -158,8 +144,7 @@ import Layout from "../layouts/Layout.astro";
 
     //verifica letras en posicion incorrecta
     for (let i = 0; i < writedWord.length; i++) {
-
-      if (writedWord[i] !== word[i] && restLetters.includes(writedWord[i])) {
+      if (writedWord[i] !== game.word[i] && restLetters.includes(writedWord[i])) {
         color = "bg-yellow-400";
         changeElementColor(writedWord[i], color, i);
         restLetters[restLetters.indexOf(writedWord[i])] = "";
@@ -174,15 +159,15 @@ import Layout from "../layouts/Layout.astro";
 
     if (trueCounter === 5) {
       setTimeout(() => {
-        window.alert("Bien hechoo!!");
+        showModal();
       }, 1000);
-      activeArray = 10;
+      game.activeArray = 10;
     } else {
-      activeArray++;
+      game.activeArray++;
     }
 
-    if (activeArray === 6) {
-      window.alert(`Perdiste!! la palabra era ${word}`);
+    if (game.activeArray === 6) {
+      window.alert(`Perdiste!! la palabra era ${game.word}`);
     }
   }
 
@@ -202,9 +187,11 @@ import Layout from "../layouts/Layout.astro";
       }
     }
 
-    const cell = document.querySelector(`#row-${activeArray}-cell-${index}`);
+    const cell = document.querySelector(`#row-${game.activeArray}-cell-${index}`);
 
     cell?.classList.remove("bg-white");
     cell?.classList.add(color);
   }
+
+  renderGrid();
 </script>
