@@ -59,6 +59,7 @@ export const words = [
   "punto",
   "queso",
   "salto",
+  "cuota",
   "zurdo",
   "menta",
   "rango",
