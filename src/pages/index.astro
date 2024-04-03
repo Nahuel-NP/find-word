@@ -108,13 +108,7 @@ import Layout from "../layouts/Layout.astro";
     if (matriz[game.activeArray].includes("0")) {
       window.alert("Palabra incompleta");
     } else {
-      if (words.includes(myWord.toLowerCase())) {
         verifyWord(myWord);
-      } else {
-        window.alert(
-          "Esa palabra no existe en nuestra base de datos, puede que se agregue pronto"
-        );
-      }
     }
   }
 
